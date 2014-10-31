@@ -74,6 +74,7 @@
     <Content Include="images\reset.png" />
     <Content Include="images\slot-machine.png" />
     <Content Include="images\spin-button.png" />
+    <Content Include="sounds\click.wav" />
     <Content Include="sounds\yay.ogg" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>

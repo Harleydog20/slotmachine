@@ -21,6 +21,7 @@ var bars = 0;
 var bells = 0;
 var sevens = 0;
 var blanks = 0;
+var click;
 
 var reel1;
 var reel2;
@@ -52,7 +53,8 @@ function preload(): void {
         { id: "cherries", src: "images/cherries.jpg" },
         { id: "grapes", src: "images/grapes.png" },
         { id: "orange", src: "images/orange.png" },
-        { id: "logo", src: "images/logo.png" }
+        { id: "logo", src: "images/logo.png" },
+        { id: "click", src: "sounds/click.wav" }
     ]);
 }
 
@@ -66,6 +68,7 @@ function init(): void {
 }
 
 function handleTick(event): void {
+    
     creditstext.text = playerMoney.toString();
     bettext.text = playerBet.toString();
     winningstext.text = winnings.toString();
@@ -74,6 +77,8 @@ function handleTick(event): void {
 }
 
 function gameStart(): void {
+    //sounds
+    click = createjs.Sound.play("click");
     //buttons
     var slotmachine = new createjs.Bitmap(queue.getResult('slotmachine'));
     stage.addChild(slotmachine);
@@ -137,6 +142,7 @@ function gameStart(): void {
     bet1.addEventListener("click", function () {        
         playerBet = 1;
         bettext.text = playerBet.toString();
+        click.play();
         stage.update();
     })
     //bet-max button function
@@ -145,6 +151,7 @@ function gameStart(): void {
     betmax.addEventListener("click", function () {        
         playerBet = 5;
         bettext.text = playerBet.toString();
+        click.play();
         stage.update();
     })
     //reset button function
@@ -168,12 +175,14 @@ function gameStart(): void {
         reel3.y = 155;
         stage.addChild(reel3);
         resetAll();
+        click.play();
         stage.update();
     })
     //exit button function
     exit.addEventListener("mouseover", function () { exit.alpha = 0.5; stage.update(); });
     exit.addEventListener("rollout", function () { exit.alpha = 1; stage.update(); });
-    exit.addEventListener("click", function () {        
+    exit.addEventListener("click", function () {    
+        click.play();    
         //Redirect the user
         if (confirm("Exit The Game?")) {
             window.location.replace("http://robertthomas.jumpingcrab.com/");
@@ -186,6 +195,7 @@ function gameStart(): void {
 
     //start the game when the spin button is clicked
     spin.addEventListener("click", function () {
+        click.play();
         if (playerBet != 0) {
             if (playerMoney == 0) {
                 if (confirm("You ran out of Money! \nDo you want to play again?")) {
