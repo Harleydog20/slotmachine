@@ -1,4 +1,11 @@
-﻿var stage: createjs.Stage;
+﻿/*
+    File name: game.ts
+    Author: Robert Thomas
+    Site Name: Slot machine 
+    File decsription: game.ts hold all of the slotmachines logic like displaying images, calculating win%/winnings and button clicks
+ */
+
+var stage: createjs.Stage;
 var queue;
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 var dreel;
@@ -14,28 +21,18 @@ var bars = 0;
 var bells = 0;
 var sevens = 0;
 var blanks = 0;
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-var sevenImg;
-var bannanaImg;
-var barImg;
-var bellImg;
-var blankImg;
-var cherriesImg;
-var grapesImg;
-var orangesImg;
-
 
 var reel1;
 var reel2;
 var reel3;
-var reels = ["seven", "seven", "seven"];
+var reels = ["", "", ""];
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 var creditstext = new createjs.Text(playerMoney.toString(), "35px Myriad Pro", "red");
 var bettext = new createjs.Text(playerBet.toString(), "35px Myriad Pro", "red");
 var winningstext = new createjs.Text(winnings.toString(), "35px Myriad Pro", "red");
 var jackpottext = new createjs.Text(jackpot.toString(), "35px Myriad Pro", "red");
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+//load all images and sound before game starts
 function preload(): void {
     queue = new createjs.LoadQueue();
     queue.installPlugin(createjs.Sound);
@@ -54,7 +51,8 @@ function preload(): void {
         { id: "blank", src: "images/blank.png" },
         { id: "cherries", src: "images/cherries.jpg" },
         { id: "grapes", src: "images/grapes.png" },
-        { id: "orange", src: "images/orange.png" }
+        { id: "orange", src: "images/orange.png" },
+        { id: "logo", src: "images/logo.png" }
     ]);
 }
 
@@ -114,37 +112,26 @@ function gameStart(): void {
     
     jackpottext.x = 292;
     jackpottext.y = 253;
-    stage.addChild(jackpottext);
+    stage.addChild(jackpottext);   
 
-    
-
-    /*
-    sevenImg = new createjs.Bitmap(queue.getResult('seven'));
-    bannanaImg = new createjs.Bitmap(queue.getResult('bannana'));
-    barImg = new createjs.Bitmap(queue.getResult('bar'));
-    bellImg = new createjs.Bitmap(queue.getResult('bell'));
-    blankImg = new createjs.Bitmap(queue.getResult('blank'));
-    cherriesImg = new createjs.Bitmap(queue.getResult('cherries'));
-    grapesImg = new createjs.Bitmap(queue.getResult('grapes'));
-    orangesImg = new createjs.Bitmap(queue.getResult('oranges'));
-    */
-    reel1 = new createjs.Bitmap(queue.getResult("seven"));
-    reel2 = new createjs.Bitmap(queue.getResult("seven"));
-    reel3 = new createjs.Bitmap(queue.getResult("seven"));
-    
-    reel1.x = 69;
+    //create reels and set images that load when game is first launched
+    reel1 = new createjs.Bitmap(queue.getResult("logo"));
+    reel2 = new createjs.Bitmap(queue.getResult("logo"));
+    reel3 = new createjs.Bitmap(queue.getResult("logo"));
+    //position and add reels to stage
+    reel1.x = 66;
     reel1.y = 155;
     stage.addChild(reel1)
     
-    reel2.x = 170;
+    reel2.x = 172;
     reel2.y = 155;
     stage.addChild(reel2);
     
-    reel3.x = 282;
+    reel3.x = 276;
     reel3.y = 155;
     stage.addChild(reel3);
 
-    //bet-1
+    //bet-1 button function
     bet1.addEventListener("mouseover", function () { bet1.alpha = 0.5; stage.update(); });
     bet1.addEventListener("rollout", function () { bet1.alpha = 1; stage.update(); });
     bet1.addEventListener("click", function () {        
@@ -152,7 +139,7 @@ function gameStart(): void {
         bettext.text = playerBet.toString();
         stage.update();
     })
-    //bet-max
+    //bet-max button function
     betmax.addEventListener("mouseover", function () { betmax.alpha = 0.5; stage.update(); });
     betmax.addEventListener("rollout", function () { betmax.alpha = 1; stage.update(); });
     betmax.addEventListener("click", function () {        
@@ -160,29 +147,30 @@ function gameStart(): void {
         bettext.text = playerBet.toString();
         stage.update();
     })
-    //reset
+    //reset button function
     reset.addEventListener("mouseover", function () { reset.alpha = 0.5; stage.update(); });
     reset.addEventListener("rollout", function () { reset.alpha = 1; stage.update(); });
     reset.addEventListener("click", function () {
+        //remove current images and reset them to my logo
         stage.removeChild(reel1);       
-        reel1 = new createjs.Bitmap(queue.getResult("seven"));
+        reel1 = new createjs.Bitmap(queue.getResult("logo"));
         reel1.x = 69;
         reel1.y = 155;
         stage.addChild(reel1);
         stage.removeChild(reel2);        
-        reel2 = new createjs.Bitmap(queue.getResult("seven"));
+        reel2 = new createjs.Bitmap(queue.getResult("logo"));
         reel2.x = 170;
         reel2.y = 155;
         stage.addChild(reel2); 
         stage.removeChild(reel3);        
-        reel3 = new createjs.Bitmap(queue.getResult("seven"));
+        reel3 = new createjs.Bitmap(queue.getResult("logo"));
         reel3.x = 282;
         reel3.y = 155;
         stage.addChild(reel3);
         resetAll();
         stage.update();
     })
-    //exit
+    //exit button function
     exit.addEventListener("mouseover", function () { exit.alpha = 0.5; stage.update(); });
     exit.addEventListener("rollout", function () { exit.alpha = 1; stage.update(); });
     exit.addEventListener("click", function () {        
@@ -192,11 +180,11 @@ function gameStart(): void {
 
         }
     })
-    //spin
+    //spin button function
     spin.addEventListener("mouseover", function () { spin.alpha = 0.5; stage.update(); });
     spin.addEventListener("rollout", function () { spin.alpha = 1; stage.update(); });
 
-    /* When the player clicks the spin button the game kicks off */
+    //start the game when the spin button is clicked
     spin.addEventListener("click", function () {
         if (playerBet != 0) {
             if (playerMoney == 0) {
@@ -211,15 +199,15 @@ function gameStart(): void {
                 dreel = Reels();
                 playerMoney -= playerBet;
                 determineWinnings();
-
+                //remove current reel images
                 stage.removeChild(reel1);
                 stage.removeChild(reel2);
                 stage.removeChild(reel3);
-
+                //assign new images
                 reel1 = new createjs.Bitmap(queue.getResult(dreel[0]));
                 reel2 = new createjs.Bitmap(queue.getResult(dreel[1]));
                 reel3 = new createjs.Bitmap(queue.getResult(dreel[2]));
-
+                //position and display new images
                 reel1.x = 69;
                 reel1.y = 155;
                 stage.addChild(reel1)
@@ -296,12 +284,10 @@ function Reels() {
             case checkRange(outCome[spin], 1, 27):  // 41.5% probability
                 betLine[spin] = "blank";
                 blanks++;
-               // reels[spin].image = blankImg;
                 break;
             case checkRange(outCome[spin], 28, 37): // 15.4% probability
                 betLine[spin] = "grapes";
                 grapes++;
-               // reels[spin].image = grapesImg;
                 break;
             case checkRange(outCome[spin], 38, 46): // 13.8% probability
                 betLine[spin] = "banana";

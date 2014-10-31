@@ -69,6 +69,7 @@
     <Content Include="images\cherries.jpg" />
     <Content Include="images\exit.png" />
     <Content Include="images\grapes.png" />
+    <Content Include="images\logo.png" />
     <Content Include="images\orange.png" />
     <Content Include="images\reset.png" />
     <Content Include="images\slot-machine.png" />
