@@ -59,6 +59,12 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="images\bet-1.png" />
+    <Content Include="images\bet-max.png" />
+    <Content Include="images\exit.png" />
+    <Content Include="images\reset.png" />
+    <Content Include="images\slot-machine.png" />
+    <Content Include="images\spin-button.png" />
     <Content Include="sounds\yay.ogg" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -104,6 +110,7 @@
     <TypeScriptCompile Include="Scripts\preloadjs.d.ts" />
     <TypeScriptCompile Include="Scripts\soundjs.d.ts" />
     <TypeScriptCompile Include="Scripts\tweenjs.d.ts" />
+    <TypeScriptCompile Include="Scripts\typings\jquery\jquery.d.ts" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
