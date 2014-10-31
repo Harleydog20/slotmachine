@@ -1,11 +1,11 @@
 ﻿var stage: createjs.Stage;
 var queue;
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+var dreel;
 var playerMoney = 1000;
 var winnings = 0;
 var jackpot = 5000;
 var playerBet = 0;
-var spinResult;
 var grapes = 0;
 var bananas = 0;
 var oranges = 0;
@@ -14,6 +14,21 @@ var bars = 0;
 var bells = 0;
 var sevens = 0;
 var blanks = 0;
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+var sevenImg;
+var bannanaImg;
+var barImg;
+var bellImg;
+var blankImg;
+var cherriesImg;
+var grapesImg;
+var orangesImg;
+
+
+var reel1;
+var reel2;
+var reel3;
+var reels = ["seven", "seven", "seven"];
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 var creditstext = new createjs.Text(playerMoney.toString(), "35px Myriad Pro", "red");
 var bettext = new createjs.Text(playerBet.toString(), "35px Myriad Pro", "red");
@@ -31,7 +46,15 @@ function preload(): void {
         { id: "bet1", src: "images/bet-1.png" },
         { id: "betmax", src: "images/bet-max.png" },
         { id: "reset", src: "images/reset.png" },
-        { id: "exit", src: "images/exit.png" }
+        { id: "exit", src: "images/exit.png" },
+        { id: "seven", src: "images/7.png" },
+        { id: "banana", src: "images/banana.png" },
+        { id: "bar", src: "images/bars.jpg" },
+        { id: "bell", src: "images/bell.png" },
+        { id: "blank", src: "images/blank.png" },
+        { id: "cherries", src: "images/cherries.jpg" },
+        { id: "grapes", src: "images/grapes.png" },
+        { id: "orange", src: "images/orange.png" }
     ]);
 }
 
@@ -40,6 +63,7 @@ function init(): void {
     stage.enableMouseOver(20);
     createjs.Ticker.setFPS(60);
     createjs.Ticker.addEventListener("tick", handleTick);
+
     gameStart();
 }
 
@@ -52,7 +76,7 @@ function handleTick(event): void {
 }
 
 function gameStart(): void {
-    // Add code here
+    //buttons
     var slotmachine = new createjs.Bitmap(queue.getResult('slotmachine'));
     stage.addChild(slotmachine);
     var spin = new createjs.Bitmap(queue.getResult('spin'));
@@ -75,7 +99,7 @@ function gameStart(): void {
     exit.x = 190;
     exit.y = 370;
     stage.addChild(exit);
-    
+    //textboxes
     creditstext.x = 60;
     creditstext.y = 253;
     stage.addChild(creditstext);
@@ -91,6 +115,34 @@ function gameStart(): void {
     jackpottext.x = 292;
     jackpottext.y = 253;
     stage.addChild(jackpottext);
+
+    
+
+    /*
+    sevenImg = new createjs.Bitmap(queue.getResult('seven'));
+    bannanaImg = new createjs.Bitmap(queue.getResult('bannana'));
+    barImg = new createjs.Bitmap(queue.getResult('bar'));
+    bellImg = new createjs.Bitmap(queue.getResult('bell'));
+    blankImg = new createjs.Bitmap(queue.getResult('blank'));
+    cherriesImg = new createjs.Bitmap(queue.getResult('cherries'));
+    grapesImg = new createjs.Bitmap(queue.getResult('grapes'));
+    orangesImg = new createjs.Bitmap(queue.getResult('oranges'));
+    */
+    reel1 = new createjs.Bitmap(queue.getResult("seven"));
+    reel2 = new createjs.Bitmap(queue.getResult("seven"));
+    reel3 = new createjs.Bitmap(queue.getResult("seven"));
+    
+    reel1.x = 69;
+    reel1.y = 155;
+    stage.addChild(reel1)
+    
+    reel2.x = 170;
+    reel2.y = 155;
+    stage.addChild(reel2);
+    
+    reel3.x = 282;
+    reel3.y = 155;
+    stage.addChild(reel3);
 
     //bet-1
     bet1.addEventListener("mouseover", function () { bet1.alpha = 0.5; stage.update(); });
@@ -112,6 +164,21 @@ function gameStart(): void {
     reset.addEventListener("mouseover", function () { reset.alpha = 0.5; stage.update(); });
     reset.addEventListener("rollout", function () { reset.alpha = 1; stage.update(); });
     reset.addEventListener("click", function () {
+        stage.removeChild(reel1);       
+        reel1 = new createjs.Bitmap(queue.getResult("seven"));
+        reel1.x = 69;
+        reel1.y = 155;
+        stage.addChild(reel1);
+        stage.removeChild(reel2);        
+        reel2 = new createjs.Bitmap(queue.getResult("seven"));
+        reel2.x = 170;
+        reel2.y = 155;
+        stage.addChild(reel2); 
+        stage.removeChild(reel3);        
+        reel3 = new createjs.Bitmap(queue.getResult("seven"));
+        reel3.x = 282;
+        reel3.y = 155;
+        stage.addChild(reel3);
         resetAll();
         stage.update();
     })
@@ -141,9 +208,29 @@ function gameStart(): void {
                 alert("You don't have enough Money to place that bet.");
             }
             else if (playerBet <= playerMoney) {
-                spinResult = Reels();
+                dreel = Reels();
                 playerMoney -= playerBet;
                 determineWinnings();
+
+                stage.removeChild(reel1);
+                stage.removeChild(reel2);
+                stage.removeChild(reel3);
+
+                reel1 = new createjs.Bitmap(queue.getResult(dreel[0]));
+                reel2 = new createjs.Bitmap(queue.getResult(dreel[1]));
+                reel3 = new createjs.Bitmap(queue.getResult(dreel[2]));
+
+                reel1.x = 69;
+                reel1.y = 155;
+                stage.addChild(reel1)
+
+                reel2.x = 170;
+                reel2.y = 155;
+                stage.addChild(reel2);
+
+                reel3.x = 282;
+                reel3.y = 155;
+                stage.addChild(reel3);
             }
         }
         else {
@@ -209,33 +296,35 @@ function Reels() {
             case checkRange(outCome[spin], 1, 27):  // 41.5% probability
                 betLine[spin] = "blank";
                 blanks++;
+               // reels[spin].image = blankImg;
                 break;
             case checkRange(outCome[spin], 28, 37): // 15.4% probability
-                betLine[spin] = "Grapes";
+                betLine[spin] = "grapes";
                 grapes++;
+               // reels[spin].image = grapesImg;
                 break;
             case checkRange(outCome[spin], 38, 46): // 13.8% probability
-                betLine[spin] = "Banana";
+                betLine[spin] = "banana";
                 bananas++;
                 break;
             case checkRange(outCome[spin], 47, 54): // 12.3% probability
-                betLine[spin] = "Orange";
+                betLine[spin] = "orange";
                 oranges++;
                 break;
             case checkRange(outCome[spin], 55, 59): //  7.7% probability
-                betLine[spin] = "Cherry";
+                betLine[spin] = "cherries";
                 cherries++;
                 break;
             case checkRange(outCome[spin], 60, 62): //  4.6% probability
-                betLine[spin] = "Bar";
+                betLine[spin] = "bar";
                 bars++;
                 break;
             case checkRange(outCome[spin], 63, 64): //  3.1% probability
-                betLine[spin] = "Bell";
+                betLine[spin] = "bell";
                 bells++;
                 break;
             case checkRange(outCome[spin], 65, 65): //  1.5% probability
-                betLine[spin] = "Seven";
+                betLine[spin] = "seven";
                 sevens++;
                 break;
         }

@@ -59,9 +59,17 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="images\7.png" />
+    <Content Include="images\banana.png" />
+    <Content Include="images\bars.jpg" />
+    <Content Include="images\bell.png" />
     <Content Include="images\bet-1.png" />
     <Content Include="images\bet-max.png" />
+    <Content Include="images\blank.png" />
+    <Content Include="images\cherries.jpg" />
     <Content Include="images\exit.png" />
+    <Content Include="images\grapes.png" />
+    <Content Include="images\orange.png" />
     <Content Include="images\reset.png" />
     <Content Include="images\slot-machine.png" />
     <Content Include="images\spin-button.png" />
