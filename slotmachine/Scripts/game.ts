@@ -1,7 +1,8 @@
 ﻿/*
     File name: game.ts
     Author: Robert Thomas
-    Site Name: Slot machine 
+    Last Modified by: Robert Thomas
+    Date last Modified: Oct. 31, 2014 
     File decsription: game.ts hold all of the slotmachines logic like displaying images, calculating win%/winnings and button clicks
  */
 
